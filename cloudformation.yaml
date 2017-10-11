@@ -1,0 +1,148 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM for Apollo Server with custom domain
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: The api domain name (e.g. example.com)
+  SubDomainName:
+    Type: String
+    Description: The api sub-domain name (e.g. www)
+  BasePath:
+    Type: String
+    Description: The api basePath (e.g. apolloserverdemo)
+  DistributionDomainName:
+    Type: String
+    Description: The api distribution domain name (e.g. *********.cloudfront.net)
+  Stage:
+    Type: String
+    Description: Stage to deploy (e.g. dev)
+
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      DefinitionUri: ./packaged-swagger.yaml
+      StageName: !Ref Stage
+      Variables:
+        ServerlessExpressLambdaFunctionName: !Ref LambdaFunction
+
+  ApiGatewayMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      BasePath: !Ref BasePath
+      DomainName: !Sub ${SubDomainName}.${DomainName}
+      RestApiId: !Ref ApiGatewayApi
+      # Stage: prod
+
+  DNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Sub ${DomainName}.
+      RecordSets:
+      - 
+        Name: !Sub ${SubDomainName}.${DomainName}.
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !Ref DistributionDomainName
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+
+  LambdaApiGatewayExecutionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Join
+        - ''
+        - - 'arn:aws:execute-api:'
+          - !Ref AWS::Region
+          - ":"
+          - !Ref AWS::AccountId
+          - ":"
+          - !Ref ApiGatewayApi
+          - "/*/*"
+
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Environment:
+        Variables:
+          STAGE: !Ref Stage
+      CodeUri: ./
+      Handler: build/index.handler
+      MemorySize: 1024
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: nodejs6.10
+      Timeout: 30
+      Events:
+        ProxyApiRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /
+            Method: ANY
+        ProxyApiGreedy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  LambdaFunctionConsoleUrl:
+    Description: Console URL for the Lambda Function.
+    Value: !Join
+      - ''
+      - - https://
+        - !Ref AWS::Region
+        - ".console.aws.amazon.com/lambda/home?region="
+        - !Ref AWS::Region
+        - "#/functions/"
+        - !Ref LambdaFunction
+
+  ApiGatewayApiConsoleUrl:
+    Description: Console URL for the API Gateway API's Stage.
+    Value: !Join
+      - ''
+      - - https://
+        - !Ref AWS::Region
+        - ".console.aws.amazon.com/apigateway/home?region="
+        - !Ref AWS::Region
+        - "#/apis/"
+        - !Ref ApiGatewayApi
+        - !Sub "/stages/${Stage}"
+
+  ApiUrl:
+    Description: Invoke URL for your API. Clicking this link will perform a GET request
+      on the root resource of your API.
+    Value: !Join
+      - ''
+      - - https://
+        - !Sub "${SubDomainName}.${DomainName}"
+        - !Sub "/${BasePath}"
+        - !Sub "/${Stage}/graphiql"

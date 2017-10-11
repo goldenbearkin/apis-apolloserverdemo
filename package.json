@@ -1,0 +1,29 @@
+{
+  "name": "api-apolloserverdemo",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server-express": "^1.1.2",
+    "aws-serverless-express": "^3.0.2",
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.0",
+    "cors": "^2.8.4",
+    "express": "^4.15.5",
+    "graphql": "^0.11.4",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@types/aws-serverless-express": "^2.1.1",
+    "@types/body-parser": "^1.16.5",
+    "@types/compression": "^0.0.34",
+    "@types/cors": "^2.8.1",
+    "@types/lodash": "^4.14.76",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
+  },
+  "scripts": {
+    "start": "nodemon --watch src --exec ts-node ./src/index.local.ts",
+    "build": "tsc",
+    "deploy": "yarn build && ./deploy.sh $npm_package_name"
+  }
+}
