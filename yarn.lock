@@ -62,6 +62,10 @@
   version "8.0.31"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.31.tgz#d9af61093cf4bfc9f066ca34de0175012cfb0ce9"
 
+"@types/pem@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@types/pem/-/pem-1.9.2.tgz#cd0b195d161dffbcb0aa88fa9fd94b24dd2af10b"
+
 "@types/serve-static@*":
   version "1.7.32"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.7.32.tgz#0f6732e4dab0813771dd8fc8fe14940f34728b4c"
@@ -173,6 +177,10 @@ chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
+charenc@~0.0.1:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
+
 colors@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.1.2.tgz#168a4701756b6a7f51a12ce0c97bfa28c084ed63"
@@ -225,6 +233,10 @@ cors@^2.8.4:
   dependencies:
     object-assign "^4"
     vary "^1"
+
+crypt@~0.0.1:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/crypt/-/crypt-0.0.2.tgz#88d7ff7ec0dfb86f713dc87bbb42d044d3e6c41b"
 
 debug@2.6.8:
   version "2.6.8"
@@ -395,6 +407,14 @@ ipaddr.js@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.4.0.tgz#296aca878a821816e5b85d0a285a99bcff4582f0"
 
+is-buffer@~1.1.1:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.5.tgz#1f3b26ef613b214b88cbca23cc6c01d87961eecc"
+
+isexe@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
+
 iterall@1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.2.tgz#413332b3cdb46f8f5ede57d6cd8e3ca8a9df8816"
@@ -406,6 +426,14 @@ js-tokens@^3.0.2:
 lodash@^4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
+md5@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/md5/-/md5-2.2.1.tgz#53ab38d5fe3c8891ba465329ea23fac0540126f9"
+  dependencies:
+    charenc "~0.0.1"
+    crypt "~0.0.1"
+    is-buffer "~1.1.1"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -467,6 +495,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
+os-tmpdir@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
+
 parseurl@~1.3.1, parseurl@~1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.2.tgz#fc289d4ed8993119460c156253262cdc8de65bf3"
@@ -482,6 +514,15 @@ path-parse@^1.0.5:
 path-to-regexp@0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
+
+pem@^1.12.3:
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/pem/-/pem-1.12.3.tgz#b1fb5c8b79da8d18146c27fee79b0d4ddf9905b3"
+  dependencies:
+    md5 "^2.2.1"
+    os-tmpdir "^1.0.1"
+    safe-buffer "^5.1.1"
+    which "^1.2.4"
 
 proxy-addr@~1.1.5:
   version "1.1.5"
@@ -517,7 +558,7 @@ resolve@^1.3.2:
   dependencies:
     path-parse "^1.0.5"
 
-safe-buffer@5.1.1:
+safe-buffer@5.1.1, safe-buffer@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
 
@@ -621,6 +662,12 @@ uuid@^3.0.1:
 vary@^1, vary@~1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
+
+which@^1.2.4:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/which/-/which-1.3.0.tgz#ff04bdfc010ee547d780bec38e1ac1c2777d253a"
+  dependencies:
+    isexe "^2.0.0"
 
 wrappy@1:
   version "1.0.2"

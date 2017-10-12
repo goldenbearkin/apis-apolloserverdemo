@@ -9,7 +9,7 @@ import { executableSchema } from './nodes/executableSchema';
 
 export const app = express();
 
-const apiPath = '/apolloserverdemo';
+export const apiPath = '/apolloserverdemo';
 
 const stagePath = process.env.STAGE ? `/${process.env.STAGE}` : '';
 const basePath = apiPath + stagePath;
