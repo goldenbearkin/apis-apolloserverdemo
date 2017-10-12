@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: SAM for Apollo Server with custom domain
+Description: api for apis.goldenbearkin.com/apolloserverdemo/prod
 
 Parameters:
   DomainName:
@@ -12,9 +12,6 @@ Parameters:
   BasePath:
     Type: String
     Description: The api basePath (e.g. apolloserverdemo)
-  DistributionDomainName:
-    Type: String
-    Description: The api distribution domain name (e.g. *********.cloudfront.net)
   Stage:
     Type: String
     Description: Stage to deploy (e.g. dev)
@@ -35,18 +32,6 @@ Resources:
       DomainName: !Sub ${SubDomainName}.${DomainName}
       RestApiId: !Ref ApiGatewayApi
       # Stage: prod
-
-  DNS:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneName: !Sub ${DomainName}.
-      RecordSets:
-      - 
-        Name: !Sub ${SubDomainName}.${DomainName}.
-        Type: A
-        AliasTarget:
-          HostedZoneId: Z2FDTNDATAQYW2
-          DNSName: !Ref DistributionDomainName
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
