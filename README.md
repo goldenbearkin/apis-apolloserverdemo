@@ -18,7 +18,7 @@ or, to deploy to AWS, first save a beta.json at root level
   }
 }
 ```
-then change the apiPath in app.ts
+then change the apiPath in app.ts (optional)
 ```ts
 export const apiPath = '/change_to_your_desired_apiPath';
 // the api path will be https://apis.example.com/change_to_your_desired_apiPath/prod/graphiql
