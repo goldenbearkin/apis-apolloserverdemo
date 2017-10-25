@@ -12,7 +12,7 @@ cat swagger.yaml \
 echo "generated packaged-swagger.yaml"
 
 aws cloudformation package \
-    --template-file ./cloudformation.yaml \
+    --template-file ./template.yaml \
     --s3-bucket packaged-templates \
     --output-template-file packaged-template.yaml
 

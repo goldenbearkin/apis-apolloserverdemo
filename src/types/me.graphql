@@ -1,0 +1,9 @@
+type Me {
+  sub: String!
+  name: String!
+  avatarURL: String!
+}
+
+type Query {
+  me: Me!
+}

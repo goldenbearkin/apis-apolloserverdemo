@@ -23,3 +23,9 @@ yarn-error.log*
 packaged-template.yaml
 packaged-swagger.yaml
 beta.json
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
