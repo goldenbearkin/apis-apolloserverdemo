@@ -31,8 +31,6 @@ export class ExpressServer {
 
     this.app.use(compression());
     this.app.use(cors());
-    this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(awsServerlessExpressMiddleware.eventContext());
 
     this.app.use(basePath + '/graphql', bodyParser.json(), graphqlExpress(

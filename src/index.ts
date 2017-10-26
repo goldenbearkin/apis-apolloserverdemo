@@ -1,5 +1,6 @@
-import * as awsServerlessExpress from 'aws-serverless-express';
 import 'core-js';
+
+import * as awsServerlessExpress from 'aws-serverless-express';
 import { ExpressServer } from './app';
 import { INJECTOR } from './util/di/Injector';
 
