@@ -6,20 +6,18 @@ import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import { Inject, Injectable } from 'injection-js';
-// import { executableSchema } from './nodes/executableSchema';
 
 import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas';
 import * as path from 'path';
+import { LoggerInstance } from 'winston';
 import { CommonConfig } from './config/CommonConfig';
 import { AwsExpressMiddleware } from './util/di/AwsExpressMiddlewareFactory';
+import { Logger } from './util/di/LoggerFactory';
 
 const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './types')));
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
 const executableSchema = makeExecutableSchema({ typeDefs, resolvers });
-
-// export const app = express();
-// export const apiPath = '/apolloserverdemo';
 
 @Injectable()
 export class ExpressServer {
@@ -28,7 +26,8 @@ export class ExpressServer {
   public readonly basePath: string;
 
   public constructor(private config: CommonConfig,
-                     @Inject(AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler) {
+                     @Inject(AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler,
+                     @Inject(Logger) private logger: LoggerInstance) {
     const stagePath = (this.config.STAGE !== '') ? `/${this.config.STAGE}` : '';
     this.basePath = this.apiPath + stagePath;
 
