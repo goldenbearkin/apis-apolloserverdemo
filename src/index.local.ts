@@ -3,8 +3,8 @@ import 'core-js';
 import * as https from 'https';
 import * as pem from 'pem';
 import { LoggerInstance } from 'winston';
-import { ExpressServer } from './app';
 import { CommonConfig } from './config/CommonConfig';
+import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
 import { Logger } from './util/di/LoggerFactory';
 

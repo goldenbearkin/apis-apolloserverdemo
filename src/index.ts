@@ -2,7 +2,7 @@ import 'core-js';
 
 import * as awsServerlessExpress from 'aws-serverless-express';
 import { LoggerInstance } from 'winston';
-import { ExpressServer } from './app';
+import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
 import { Logger } from './util/di/LoggerFactory';
 

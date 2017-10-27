@@ -16,6 +16,9 @@ export class CommonConfig {
 
   public readonly DYNAMODB_TABLE_PREFIX: string = 'ASD';
 
+  public readonly GUEST_SUB: string = '';
+  public readonly ADMIN_SUB: string[] = [];
+
   public constructor() {
     if (process.env.ENV && process.env.ENV.toLowerCase() === 'dev') {
       this.ENV = Environment.Dev;

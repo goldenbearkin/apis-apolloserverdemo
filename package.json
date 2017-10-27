@@ -7,6 +7,8 @@
     "aws-sdk": "^2.139.0",
     "aws-serverless-express": "^3.0.2",
     "body-parser": "^1.18.2",
+    "builder-pattern": "^1.0.1",
+    "cancan": "https://github.com/Vincent-Pang/cancan.git#develop",
     "compression": "^1.7.0",
     "core-js": "^2.5.1",
     "cors": "^2.8.4",
@@ -17,6 +19,7 @@
     "merge-graphql-schemas": "^1.2.0",
     "moment": "^2.19.1",
     "pem": "^1.12.3",
+    "result-class": "^1.2.0",
     "winston": "^2.4.0"
   },
   "devDependencies": {
