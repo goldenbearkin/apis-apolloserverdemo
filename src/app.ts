@@ -5,7 +5,7 @@ import * as express from 'express';
 
 import { graphiqlExpress, graphqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import { Inject, Injectable } from 'injection-js';
+import { Injectable, Inject } from 'injection-js';
 
 import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas';
 import * as path from 'path';
@@ -13,11 +13,6 @@ import { LoggerInstance } from 'winston';
 import { CommonConfig } from './config/CommonConfig';
 import { AwsExpressMiddleware } from './util/di/AwsExpressMiddlewareFactory';
 import { Logger } from './util/di/LoggerFactory';
-
-const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './types')));
-const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
-
-const executableSchema = makeExecutableSchema({ typeDefs, resolvers });
 
 @Injectable()
 export class ExpressServer {
@@ -34,6 +29,11 @@ export class ExpressServer {
     this.app.use(compression());
     this.app.use(cors());
     this.app.use(awsExpressMiddleware);
+
+    const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './types')));
+    const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
+
+    const executableSchema = makeExecutableSchema({ typeDefs, resolvers });
 
     this.app.use(this.basePath + '/graphql', bodyParser.json(), graphqlExpress(
       {

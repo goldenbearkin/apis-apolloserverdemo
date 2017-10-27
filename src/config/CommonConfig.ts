@@ -14,6 +14,8 @@ export class CommonConfig {
 
   public readonly LOG_LEVEL: string = 'debug'; // debug, info, warn, error
 
+  public readonly DYNAMODB_TABLE_PREFIX: string = 'ASD';
+
   public constructor() {
     if (process.env.ENV && process.env.ENV.toLowerCase() === 'dev') {
       this.ENV = Environment.Dev;
