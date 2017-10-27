@@ -32,7 +32,7 @@ const binaryMimeTypes = [
 const server = awsServerlessExpress.createServer(expressServer.app, undefined, binaryMimeTypes);
 
 exports.handler = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context) => {
-  awsServerlessExpress.proxy(server, event, context);
   console.log(JSON.stringify(event));
   console.log('hello');
+  return awsServerlessExpress.proxy(server, event, context);
 };
