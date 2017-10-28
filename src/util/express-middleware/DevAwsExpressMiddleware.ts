@@ -1,7 +1,7 @@
 import * as express from 'express';
 
 export const devAwsExpressMiddleware: express.RequestHandler = (req: express.Request,
-                                                                _: express.Response,
+                                                                _resp: express.Response,
                                                                 next: express.NextFunction) => {
   const request = req as any;
 

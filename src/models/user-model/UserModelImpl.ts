@@ -1,8 +1,8 @@
 import * as AWS from 'aws-sdk';
 import { Injectable } from 'injection-js';
 import { CommonConfig } from '../../config/CommonConfig';
-import { UserModel } from '../../services/user-service/UserModel';
 import { UserInfoT } from '../../services/user-service/UserService';
+import { UserModel } from './UserModel';
 
 @Injectable()
 export class UserModelImpl extends UserModel {
