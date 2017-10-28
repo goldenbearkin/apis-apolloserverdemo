@@ -8,5 +8,5 @@ export type UserInfoT = {
 };
 
 export abstract class UserService {
-  public abstract getUserInfoBySub(performer: IAclUser, sub: string): Result<Promise<UserInfoT | undefined>, string>;
+  public abstract getUserInfoBySub(performer: IAclUser, sub: string): Promise<Result<UserInfoT, string>>;
 }

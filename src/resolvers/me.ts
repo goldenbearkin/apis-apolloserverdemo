@@ -9,10 +9,12 @@ export default {
 
       const result = userService.getUserInfoBySub(context.aclUser, context.aclUser.getSub());
 
-      return result.match({
-        Ok: v => v,
-        Err: e => { throw new Error(e); }
-      });
+      return result.then(data =>
+        data.match({
+          Ok: v => v,
+          Err: e => { throw new Error(e); }
+        })
+      );
     }
   }
 };

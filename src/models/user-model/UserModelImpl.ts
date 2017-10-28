@@ -1,5 +1,6 @@
 import * as AWS from 'aws-sdk';
 import { Injectable } from 'injection-js';
+import {None, Option, Some} from 'result-class';
 import { CommonConfig } from '../../config/CommonConfig';
 import { UserInfoT } from '../../services/user-service/UserService';
 import { UserModel } from './UserModel';
@@ -11,7 +12,7 @@ export class UserModelImpl extends UserModel {
     super();
   }
 
-  public getUserInfoBySub(sub: string): Promise<UserInfoT | undefined> {
+  public async getUserInfoBySub(sub: string): Promise<Option<UserInfoT>> {
     const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
       TableName: `${this.config.DYNAMODB_TABLE_PREFIX}_UserInfo`,
       Key: { sub }
@@ -21,8 +22,8 @@ export class UserModelImpl extends UserModel {
       .promise()
       .then(data => {
         const item = data.Item;
-        if (item === undefined) { return undefined; }
-        return { sub, ...item } as UserInfoT;
+        if (item === undefined) { return None.getInstance<UserInfoT>(); }
+        return new Some({ sub, ...item } as UserInfoT);
       });
   }
 }

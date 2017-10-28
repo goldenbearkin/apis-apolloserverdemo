@@ -1,6 +1,6 @@
 import * as CanCan from 'cancan';
 import { Injectable } from 'injection-js';
-import { Err, Ok, Result } from 'result-class';
+import { Err, Result } from 'result-class';
 import { AclAction } from '../../acl/AclAction';
 import { AclTarget } from '../../acl/AclTarget';
 import { IAclUser } from '../../acl/acluser/IAclUser';
@@ -14,11 +14,12 @@ export class UserServiceImpl extends UserService {
     super();
   }
 
-  public getUserInfoBySub(performer: IAclUser, sub: string): Result<Promise<UserInfoT | undefined>, string> {
+  public async getUserInfoBySub(performer: IAclUser, sub: string): Promise<Result<UserInfoT, string>> {
     if ( !this.cancan.can(performer, AclAction.Read, AclTarget.UserInfoT) ) {
       return new Err('Forbidden');
     }
 
-    return new Ok(this.userModel.getUserInfoBySub(sub));
+    return this.userModel.getUserInfoBySub(sub)
+      .then(v => v.ok_or('User not found'));
   }
 }
