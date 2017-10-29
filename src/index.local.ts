@@ -12,9 +12,9 @@ const expressServer = INJECTOR.get(ExpressServer) as ExpressServer;
 const config = INJECTOR.get(CommonConfig) as CommonConfig;
 const logger = INJECTOR.get(Logger) as LoggerInstance;
 
-const port = config.PORT;
+const port = config.webServer.port;
 
-if (!config.USE_HTTP) {
+if (!config.webServer.useHttp) {
   pem.createCertificate({ days: 1, selfSigned: true }, (err, keys) => {
     if (err) {
       logger.error(err);
@@ -27,5 +27,5 @@ if (!config.USE_HTTP) {
   expressServer.app.listen(port);
 }
 
-const protocolStr = config.USE_HTTP ? 'http' : 'https';
+const protocolStr = config.webServer.useHttp ? 'http' : 'https';
 logger.info(`listening on ${protocolStr}://localhost:${port}${expressServer.basePath}/graphiql`);

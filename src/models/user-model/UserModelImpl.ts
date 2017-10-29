@@ -14,7 +14,7 @@ export class UserModelImpl extends UserModel {
 
   public async getUserInfoBySub(sub: string): Promise<Option<UserInfoT>> {
     const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
-      TableName: `${this.config.DYNAMODB_TABLE_PREFIX}_UserInfo`,
+      TableName: `${this.config.dynamoDb.dynamoDbTablePrefix}_UserInfo`,
       Key: { sub }
     };
 

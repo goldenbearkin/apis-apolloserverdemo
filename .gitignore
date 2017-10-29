@@ -29,3 +29,5 @@ beta.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/config

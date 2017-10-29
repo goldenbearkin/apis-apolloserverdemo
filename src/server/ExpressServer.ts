@@ -33,7 +33,7 @@ export class ExpressServer {
                      acl: AccessControlList) {
     acl.init();
 
-    const stagePath = (this.config.STAGE !== '') ? `/${this.config.STAGE}` : '';
+    const stagePath = (this.config.apiGateway.stagePath !== '') ? `/${this.config.apiGateway.stagePath}` : '';
     this.basePath = this.apiPath + stagePath;
 
     this.app.use(compression());
@@ -48,7 +48,7 @@ export class ExpressServer {
     this.app.use(this.basePath + '/graphql', bodyParser.json(), graphqlExpress(
       (req: express.Request, _resp: express.Response): GraphQLOptions => {
 
-        const requestContext = this.genRequestContext(req);
+        const requestContext = this.buildRequestContext(req);
 
         return {
           schema: executableSchema,
@@ -62,7 +62,7 @@ export class ExpressServer {
     }));
   }
 
-  private genRequestContext(req: express.Request): RequestContext {
+  private buildRequestContext(req: express.Request): RequestContext {
     const builder = Builder<RequestContext>();
 
     builder.rawExpressRequest(req);
@@ -81,9 +81,9 @@ export class ExpressServer {
   }
 
   private getRoleBySub(sub: string): Role {
-    if (this.config.GUEST_SUB === sub) {
+    if (this.config.acl.guestSub === sub) {
       return Role.Guest;
-    } else if (this.config.ADMIN_SUB.includes(sub)) {
+    } else if (this.config.acl.adminSubs.includes(sub)) {
       return Role.Admin;
     }
 

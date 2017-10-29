@@ -1,3 +1,5 @@
+import { Builder } from 'builder-pattern';
+import * as config from 'config';
 import { Injectable } from 'injection-js';
 
 export enum Environment {
@@ -5,35 +7,84 @@ export enum Environment {
   Prod
 }
 
+// tslint:disable-next-line:interface-name
+export interface General {
+  environment: Environment;
+  logLevel: string;
+}
+
+// tslint:disable-next-line:interface-name
+export interface WebServer {
+  useHttp: boolean;
+  port: number;
+}
+
+// tslint:disable-next-line:interface-name
+export interface ApiGateway {
+  stagePath: string;
+}
+
+// tslint:disable-next-line:interface-name
+export interface DynamoDb {
+  dynamoDbTablePrefix: string;
+}
+
+// tslint:disable-next-line:interface-name
+export interface Acl {
+  guestSub: string;
+  adminSubs: string[];
+}
+
 @Injectable()
 export class CommonConfig {
-  public readonly ENV: Environment  = Environment.Prod;
-  public readonly STAGE: string     = '';
-  public readonly USE_HTTP: boolean = false;
-  public readonly PORT: number      = 4433;
-
-  public readonly LOG_LEVEL: string = 'debug'; // debug, info, warn, error
-
-  public readonly DYNAMODB_TABLE_PREFIX: string = 'ASD';
-
-  public readonly GUEST_SUB: string = '';
-  public readonly ADMIN_SUB: string[] = [];
+  public readonly general: Readonly<General>;
+  public readonly webServer: Readonly<WebServer>;
+  public readonly apiGateway: Readonly<ApiGateway>;
+  public readonly dynamoDb: Readonly<DynamoDb>;
+  public readonly acl: Readonly<Acl>;
 
   public constructor() {
-    if (process.env.ENV && process.env.ENV.toLowerCase() === 'dev') {
-      this.ENV = Environment.Dev;
+    {
+      const builder = Builder<General>();
+
+      builder.environment( config.get('General.environment') === 'dev' ? Environment.Dev : Environment.Prod );
+      builder.logLevel( config.get('General.logLevel') );
+
+      this.general = builder.build();
     }
 
-    if (process.env.STAGE) {
-      this.STAGE = process.env.STAGE;
+    {
+      const builder = Builder<WebServer>();
+
+      builder.useHttp( config.get('WebServer.useHttp') );
+      builder.port( config.get('WebServer.port') );
+
+      this.webServer = builder.build();
     }
 
-    if (process.env.USE_HTTP) {
-      this.USE_HTTP = true;
+    {
+      const builder = Builder<ApiGateway>();
+
+      builder.stagePath( config.get('ApiGateway.stagePath') );
+
+      this.apiGateway = builder.build();
     }
 
-    if (process.env.PORT) {
-      this.PORT = process.env.PORT;
+    {
+      const builder = Builder<DynamoDb>();
+
+      builder.dynamoDbTablePrefix( config.get('DynamoDb.dynamoDbTablePrefix') );
+
+      this.dynamoDb = builder.build();
+    }
+
+    {
+      const builder = Builder<Acl>();
+
+      builder.guestSub( config.get('Acl.guestSub') );
+      builder.adminSubs( config.get('Acl.adminSubs') );
+
+      this.acl = builder.build();
     }
   }
 }
