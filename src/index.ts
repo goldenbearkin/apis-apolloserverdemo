@@ -1,9 +1,13 @@
-import * as awsServerlessExpress from 'aws-serverless-express';
 import 'core-js';
-import { ExpressServer } from './app';
+
+import * as awsServerlessExpress from 'aws-serverless-express';
+import { LoggerInstance } from 'winston';
+import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
+import { Logger } from './util/di/LoggerFactory';
 
 const expressServer = INJECTOR.get(ExpressServer) as ExpressServer;
+const logger = INJECTOR.get(Logger) as LoggerInstance;
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
@@ -31,7 +35,8 @@ const binaryMimeTypes = [
 const server = awsServerlessExpress.createServer(expressServer.app, undefined, binaryMimeTypes);
 
 exports.handler = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context) => {
-  awsServerlessExpress.proxy(server, event, context);
-  console.log(JSON.stringify(event));
-  console.log('hello');
+  logger.debug(JSON.stringify(event));
+  logger.debug('hello');
+
+  return awsServerlessExpress.proxy(server, event, context);
 };

@@ -6,6 +6,7 @@
         "quotemark": [true, "single"],
         "trailing-comma": [false],
         "interface-over-type-literal": false,
-        "arrow-parens": false
+        "arrow-parens": false,
+        "variable-name": [true, "check-format", "allow-leading-underscore"]
     }
 }
