@@ -4,7 +4,8 @@ import { Injectable } from 'injection-js';
 
 export enum Environment {
   Dev,
-  Prod
+  Prod,
+  Test
 }
 
 // tslint:disable-next-line:interface-name
@@ -47,7 +48,27 @@ export class CommonConfig {
     {
       const builder = Builder<General>();
 
-      builder.environment( config.get('General.environment') === 'dev' ? Environment.Dev : Environment.Prod );
+      const envStr = config.get('General.environment');
+
+      let env: Environment;
+
+      switch (envStr) {
+        case 'dev':
+          env = Environment.Dev;
+          break;
+        case 'prod':
+          env = Environment.Prod;
+          break;
+        case 'test':
+          env = Environment.Test;
+          break;
+
+        default:
+          env = Environment.Prod;
+      }
+
+      builder.environment(env);
+
       builder.logLevel( config.get('General.logLevel') );
 
       this.general = builder.build();
