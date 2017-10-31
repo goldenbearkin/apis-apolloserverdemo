@@ -9,5 +9,11 @@ import { devAwsExpressMiddleware } from '../express-middleware/DevAwsExpressMidd
 export const AwsExpressMiddleware = new InjectionToken<express.RequestHandler>('AwsExpressMiddleware');
 
 export const awsExpressMiddlewareFactory = (config: CommonConfig): express.RequestHandler => {
-  return config.general.environment === Environment.Dev ? devAwsExpressMiddleware : awsServerlessExpressMiddleware.eventContext();
+  switch (config.general.environment) {
+    case Environment.Prod:
+      return awsServerlessExpressMiddleware.eventContext();
+    case Environment.Dev:
+    case Environment.Test:
+      return devAwsExpressMiddleware;
+  }
 };

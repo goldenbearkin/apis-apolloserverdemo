@@ -53,18 +53,18 @@ export class CommonConfig {
       let env: Environment;
 
       switch (envStr) {
-        case 'dev':
-          env = Environment.Dev;
-          break;
         case 'prod':
           env = Environment.Prod;
+          break;
+        case 'dev':
+          env = Environment.Dev;
           break;
         case 'test':
           env = Environment.Test;
           break;
 
         default:
-          env = Environment.Prod;
+          throw new Error('unknown General->environment in config yaml');
       }
 
       builder.environment(env);
