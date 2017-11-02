@@ -33,17 +33,45 @@
     "@types/config": "^0.0.33",
     "@types/cors": "^2.8.1",
     "@types/graphql": "^0.11.5",
+    "@types/jest": "^21.1.5",
     "@types/lodash": "^4.14.80",
     "@types/node": "6.0.90",
     "@types/pem": "^1.9.3",
     "@types/winston": "^2.3.7",
     "@types/zen-observable": "^0.5.3",
+    "ts-jest": "^21.1.4",
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
   },
   "scripts": {
     "start": "nodemon --watch src --exec ts-node ./src/index.local.ts",
     "build": "./build.sh",
-    "deploy": "yarn build && ./deploy.sh $npm_package_name"
+    "deploy": "yarn build && ./deploy.sh $npm_package_name",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/build/"
+    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "collectCoverage": true,
+    "mapCoverage": true,
+    "coverageDirectory": "test_coverage_dir",
+    "collectCoverageFrom": [
+      "src/**/*.tsx",
+      "src/**/*.ts",
+      "!src/global.d.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

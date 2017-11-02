@@ -31,3 +31,4 @@ beta.json
 !.vscode/extensions.json
 
 /config
+/test_coverage_dir
