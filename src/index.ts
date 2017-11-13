@@ -32,7 +32,10 @@ const binaryMimeTypes = [
   'text/text',
   'text/xml',
 ];
-const server = awsServerlessExpress.createServer(expressServer.app, undefined, binaryMimeTypes);
+// don't know why the type of expressServer.app is not compactiable with createServer
+// cast expressServer.app to any to workaround the compile error first
+// need to investigate later
+const server = awsServerlessExpress.createServer(expressServer.app as any, undefined, binaryMimeTypes);
 
 exports.handler = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context) => {
   logger.debug(JSON.stringify(event));

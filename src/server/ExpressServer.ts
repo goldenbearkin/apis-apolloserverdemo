@@ -46,7 +46,10 @@ export class ExpressServer {
     const executableSchema = makeExecutableSchema({ typeDefs, resolvers });
 
     this.app.use(this.basePath + '/graphql', bodyParser.json(), graphqlExpress(
-      (req: express.Request, _resp: express.Response): GraphQLOptions => {
+      (req?: express.Request, _resp?: express.Response): GraphQLOptions => {
+        if (!req || !_resp) {
+          throw new Error('req or resp is missing, should not happen');
+        }
 
         const requestContext = this.buildRequestContext(req);
 
