@@ -14,7 +14,7 @@ export interface General {
 }
 
 export interface WebServer {
-  useHttp: boolean;
+  useHttps: boolean;
   port: number;
 }
 
@@ -73,7 +73,7 @@ export class CommonConfig {
     {
       const builder = Builder<WebServer>();
 
-      builder.useHttp( config.get('WebServer.useHttp') );
+      builder.useHttps( config.get('WebServer.useHttps') );
       builder.port( config.get('WebServer.port') );
 
       this.webServer = builder.build();

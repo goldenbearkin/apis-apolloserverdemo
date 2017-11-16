@@ -7,6 +7,7 @@
       "max-line-length": [true, 200],
       "object-literal-sort-keys": false,
       "quotemark": [true, "single"],
-      "variable-name": [true, "check-format", "allow-leading-underscore"]
+      "variable-name": [true, "check-format", "allow-leading-underscore"],
+      "trailing-comma": false
   }
 }
