@@ -36,6 +36,7 @@ const binaryMimeTypes = [
 // cast expressServer.app to any to workaround the compile error first
 // need to investigate later
 const server = awsServerlessExpress.createServer(expressServer.app as any, undefined, binaryMimeTypes);
+// const server = awsServerlessExpress.createServer(expressServer.app as any);
 
 exports.handler = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context) => {
   logger.debug(JSON.stringify(event));

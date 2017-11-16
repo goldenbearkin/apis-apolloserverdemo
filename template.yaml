@@ -20,7 +20,7 @@ Resources:
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
-      DefinitionUri: ./packaged-swagger.yaml
+      DefinitionUri: ./swagger.yaml
       StageName: !Ref Stage
       Variables:
         ServerlessExpressLambdaFunctionName: !Ref LambdaFunction
@@ -67,8 +67,9 @@ Resources:
       Environment:
         Variables:
           STAGE: !Ref Stage
+          NODE_ENV: production
       CodeUri: ./
-      Handler: build/index.handler
+      Handler: build/src/index.handler
       MemorySize: 1024
       Role: !GetAtt LambdaExecutionRole.Arn
       Runtime: nodejs6.10

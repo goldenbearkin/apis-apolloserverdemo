@@ -28,4 +28,4 @@ if (!config.webServer.useHttp) {
 }
 
 const protocolStr = config.webServer.useHttp ? 'http' : 'https';
-logger.info(`listening on ${protocolStr}://localhost:${port}${expressServer.basePath}/graphiql`);
+logger.info(`listening on ${protocolStr}://localhost:${port}/${expressServer.basePath}/graphiql`);
