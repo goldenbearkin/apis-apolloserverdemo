@@ -4,10 +4,10 @@ import * as awsServerlessExpress from 'aws-serverless-express';
 import { LoggerInstance } from 'winston';
 import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
-import { Logger } from './util/di/LoggerFactory';
+import { Its } from './util/di/Its';
 
 const expressServer = INJECTOR.get(ExpressServer) as ExpressServer;
-const logger = INJECTOR.get(Logger) as LoggerInstance;
+const logger = INJECTOR.get(Its.Logger) as LoggerInstance;
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly

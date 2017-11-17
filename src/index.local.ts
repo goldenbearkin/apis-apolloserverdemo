@@ -6,11 +6,11 @@ import { LoggerInstance } from 'winston';
 import { CommonConfig } from './config/CommonConfig';
 import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
-import { Logger } from './util/di/LoggerFactory';
+import { Its } from './util/di/Its';
 
 const expressServer = INJECTOR.get(ExpressServer) as ExpressServer;
 const config = INJECTOR.get(CommonConfig) as CommonConfig;
-const logger = INJECTOR.get(Logger) as LoggerInstance;
+const logger = INJECTOR.get(Its.Logger) as LoggerInstance;
 
 const port = config.webServer.port;
 

@@ -20,8 +20,7 @@ import { CommonConfig } from '../config/CommonConfig';
 import { LoggerInstance } from 'winston';
 import { AccessControlList } from '../acl/AccessControlList';
 import { Role } from '../acl/acluser/Role';
-import { AwsExpressMiddleware } from '../util/di/AwsExpressMiddlewareFactory';
-import { Logger } from '../util/di/LoggerFactory';
+import { Its } from '../util/di/Its';
 import { RequestContext } from './RequestContext';
 
 @Injectable()
@@ -31,8 +30,8 @@ export class ExpressServer {
   public readonly basePath: string;
 
   public constructor(private config: CommonConfig,
-                     @Inject(AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler,
-                     @Inject(Logger) logger: LoggerInstance,
+                     @Inject(Its.AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler,
+                     @Inject(Its.Logger) private logger: LoggerInstance,
                      acl: AccessControlList) {
     acl.init();
 
@@ -52,7 +51,9 @@ export class ExpressServer {
     this.app.use(`/${this.basePath}/graphql`, bodyParser.json(), graphqlExpress(
       (req?: express.Request, _resp?: express.Response): GraphQLOptions => {
         if (!req || !_resp) {
-          throw new Error('req or resp is missing, should not happen');
+          const errMsg = 'req or resp is missing, should not happen';
+          this.logger.warning(errMsg);
+          throw new Error(errMsg);
         }
 
         const requestContext = this.buildRequestContext(req);
@@ -61,13 +62,13 @@ export class ExpressServer {
           schema: executableSchema,
           context: requestContext,
         };
-      },
+      }
     ));
 
-    this.app.use(`/${this.basePath}/graphiql`, (_req, _res, next): any => {
+    this.app.use(`/${this.basePath}/graphiql`, (_req: express.Request, _res: express.Response, next: express.NextFunction): any => {
         // const requestContext = new RequestContext(req);
 
-        logger.debug(`/${this.basePath}/graphiql is called`);
+        // logger.debug(`/${this.basePath}/graphiql is called`);
 
         // if (requestContext.awsContext.identity.cognitoIdentityId
         if (true) { // is admin
@@ -82,6 +83,8 @@ export class ExpressServer {
     this.app.use(`/${this.basePath}/graphiql`, graphiqlExpress({
       endpointURL: 'graphql',
     }));
+
+    this.logger.silly('ExpressServer has been initialised.');
   }
 
   private buildRequestContext(req: express.Request): RequestContext {
