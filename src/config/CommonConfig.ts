@@ -5,32 +5,28 @@ import { Injectable } from 'injection-js';
 export enum Environment {
   Dev,
   Prod,
-  Test
+  Test,
 }
 
-// tslint:disable-next-line:interface-name
 export interface General {
   environment: Environment;
   logLevel: string;
 }
 
-// tslint:disable-next-line:interface-name
 export interface WebServer {
-  useHttp: boolean;
+  useHttps: boolean;
   port: number;
 }
 
-// tslint:disable-next-line:interface-name
 export interface ApiGateway {
-  stagePath: string;
+  apiPath: string;
+  // stagePath: string;
 }
 
-// tslint:disable-next-line:interface-name
 export interface DynamoDb {
   dynamoDbTablePrefix: string;
 }
 
-// tslint:disable-next-line:interface-name
 export interface Acl {
   guestSub: string;
   adminSubs: string[];
@@ -77,7 +73,7 @@ export class CommonConfig {
     {
       const builder = Builder<WebServer>();
 
-      builder.useHttp( config.get('WebServer.useHttp') );
+      builder.useHttps( config.get('WebServer.useHttps') );
       builder.port( config.get('WebServer.port') );
 
       this.webServer = builder.build();
@@ -86,7 +82,8 @@ export class CommonConfig {
     {
       const builder = Builder<ApiGateway>();
 
-      builder.stagePath( config.get('ApiGateway.stagePath') );
+      builder.apiPath( config.get('ApiGateway.apiPath') );
+      // builder.stagePath( config.get('ApiGateway.stagePath') );
 
       this.apiGateway = builder.build();
     }

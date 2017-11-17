@@ -1,11 +1,12 @@
 import { RequestContext } from '../server/RequestContext';
-import { UserService } from '../services/user-service/UserService';
+import { IUserService } from '../services/user-service/IUserService';
 import { INJECTOR } from '../util/di/Injector';
+import { Its } from '../util/di/Its';
 
 export default {
   Query: {
     me: (_obj: any, _args: any, context: RequestContext, _info: any) => {
-      const userService = INJECTOR.get(UserService) as UserService;
+      const userService = INJECTOR.get(Its.IUserService) as IUserService;
 
       const result = userService.getUserInfoBySub(context.aclUser, context.aclUser.getSub());
 

@@ -4,10 +4,10 @@ import * as awsServerlessExpress from 'aws-serverless-express';
 import { LoggerInstance } from 'winston';
 import { ExpressServer } from './server/ExpressServer';
 import { INJECTOR } from './util/di/Injector';
-import { Logger } from './util/di/LoggerFactory';
+import { Its } from './util/di/Its';
 
 const expressServer = INJECTOR.get(ExpressServer) as ExpressServer;
-const logger = INJECTOR.get(Logger) as LoggerInstance;
+const logger = INJECTOR.get(Its.Logger) as LoggerInstance;
 
 // NOTE: If you get ERR_CONTENT_DECODING_FAILED in your browser, this is likely
 // due to a compressed response (e.g. gzip) which has not been handled correctly
@@ -32,7 +32,11 @@ const binaryMimeTypes = [
   'text/text',
   'text/xml',
 ];
-const server = awsServerlessExpress.createServer(expressServer.app, undefined, binaryMimeTypes);
+// don't know why the type of expressServer.app is not compactiable with createServer
+// cast expressServer.app to any to workaround the compile error first
+// need to investigate later
+const server = awsServerlessExpress.createServer(expressServer.app as any, undefined, binaryMimeTypes);
+// const server = awsServerlessExpress.createServer(expressServer.app as any);
 
 exports.handler = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context) => {
   logger.debug(JSON.stringify(event));

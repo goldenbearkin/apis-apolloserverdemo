@@ -1,11 +1,6 @@
-import { InjectionToken } from 'injection-js';
-
 import * as moment from 'moment';
 import * as winston from 'winston';
 import { CommonConfig } from '../../config/CommonConfig';
-
-// tslint:disable-next-line:variable-name
-export const Logger = new InjectionToken<winston.LoggerInstance>('Winston');
 
 export const loggerFactory = (config: CommonConfig): winston.LoggerInstance => {
   return new winston.Logger(

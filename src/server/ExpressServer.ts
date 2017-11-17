@@ -17,24 +17,27 @@ import { AclNormalUser } from '../acl/acluser/AclNormalUser';
 import { IAclUser } from '../acl/acluser/IAclUser';
 import { CommonConfig } from '../config/CommonConfig';
 
+import { LoggerInstance } from 'winston';
 import { AccessControlList } from '../acl/AccessControlList';
 import { Role } from '../acl/acluser/Role';
-import { AwsExpressMiddleware } from '../util/di/AwsExpressMiddlewareFactory';
+import { Its } from '../util/di/Its';
 import { RequestContext } from './RequestContext';
 
 @Injectable()
 export class ExpressServer {
   public readonly app = express();
-  public readonly apiPath = '/apolloserverdemo';
+  public readonly apiPath = 'apolloserverdemo';
   public readonly basePath: string;
 
   public constructor(private config: CommonConfig,
-                     @Inject(AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler,
+                     @Inject(Its.AwsExpressMiddleware) awsExpressMiddleware: express.RequestHandler,
+                     @Inject(Its.Logger) private logger: LoggerInstance,
                      acl: AccessControlList) {
     acl.init();
 
-    const stagePath = (this.config.apiGateway.stagePath !== '') ? `/${this.config.apiGateway.stagePath}` : '';
-    this.basePath = this.apiPath + stagePath;
+    // const stagePath = (this.config.apiGateway.stagePath !== '') ? `/${this.config.apiGateway.stagePath}` : '';
+    // this.basePath = this.apiPath + stagePath;
+    this.basePath = this.config.apiGateway.apiPath;
 
     this.app.use(compression());
     this.app.use(cors());
@@ -45,8 +48,13 @@ export class ExpressServer {
 
     const executableSchema = makeExecutableSchema({ typeDefs, resolvers });
 
-    this.app.use(this.basePath + '/graphql', bodyParser.json(), graphqlExpress(
-      (req: express.Request, _resp: express.Response): GraphQLOptions => {
+    this.app.use(`/${this.basePath}/graphql`, bodyParser.json(), graphqlExpress(
+      (req?: express.Request, _resp?: express.Response): GraphQLOptions => {
+        if (!req || !_resp) {
+          const errMsg = 'req or resp is missing, should not happen';
+          this.logger.warning(errMsg);
+          throw new Error(errMsg);
+        }
 
         const requestContext = this.buildRequestContext(req);
 
@@ -57,9 +65,26 @@ export class ExpressServer {
       }
     ));
 
-    this.app.use(this.basePath + '/graphiql', graphiqlExpress({
-      endpointURL: this.basePath + '/graphql',
+    this.app.use(`/${this.basePath}/graphiql`, (_req: express.Request, _res: express.Response, next: express.NextFunction): any => {
+        // const requestContext = new RequestContext(req);
+
+        // logger.debug(`/${this.basePath}/graphiql is called`);
+
+        // if (requestContext.awsContext.identity.cognitoIdentityId
+        if (true) { // is admin
+          next();
+        }
+        // else
+        // {
+        //     res.status(403).send();
+        // }
+    });
+
+    this.app.use(`/${this.basePath}/graphiql`, graphiqlExpress({
+      endpointURL: 'graphql',
     }));
+
+    this.logger.silly('ExpressServer has been initialised.');
   }
 
   private buildRequestContext(req: express.Request): RequestContext {
